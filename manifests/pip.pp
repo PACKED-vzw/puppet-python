@@ -115,9 +115,14 @@ define python::pip (
     default  => $virtualenv,
   }
 
+  $pip_cmd = $::python::version ? {
+    /3/     => 'pip3',
+    default => 'pip',
+  }
+
   $pip_env = $virtualenv ? {
-    'system' => "${exec_prefix}pip",
-    default  => "${exec_prefix}${virtualenv}/bin/pip",
+    'system' => "${exec_prefix}${pip_cmd}",
+    default  => "${exec_prefix}${virtualenv}/bin/${pip_cmd}",
   }
 
   $pypi_index = $index ? {
